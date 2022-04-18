@@ -25,6 +25,9 @@ export default class ImageGallery extends Component  {
                 this.props.changeLoaderStatus('off');
             }) 
         }
+
+
+        
     }
 
     onItemClick = (event) => {
@@ -37,6 +40,7 @@ export default class ImageGallery extends Component  {
         const currentUrl = currentItem[0].largeImageURL
         console.log(currentUrl)
         this.props.setModalUrl(currentUrl)
+        this.props.setModalStatus(true)
         
     }
 
@@ -52,6 +56,12 @@ export default class ImageGallery extends Component  {
                    return (
                        <ImageGalleryItem key={item.id} id={item.id} imageMin={item.webformatURL} onItemClick={this.onItemClick}/>
                    )
+               })}
+
+               {this.props.onMoreBtn.length !== 0 && this.props.onMoreBtn.map(item => {
+                   return (
+                    <ImageGalleryItem key={item.id} id={item.id} imageMin={item.webformatURL} onItemClick={this.onItemClick}/>
+                )
                })}
 
             </GallaryList>

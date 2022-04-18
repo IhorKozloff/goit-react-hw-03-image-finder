@@ -4,6 +4,8 @@ import {ModalWindow} from 'components/Modal/Modal';
 import ImageGallary from 'components/ImageGallery/ImageGallery';
 import {LoadMoreBtn} from 'components/Button/Button';
 import {Loader} from 'components/Loader/Loader';
+import {AppStyled} from 'components/App.styled';
+import {searchMore} from 'components/API';
 
 
 export class App extends Component {
@@ -12,6 +14,8 @@ export class App extends Component {
     searchRequest: '',
     modalUrl:'',
     loaderStatus: 'off',
+    onMoreBtnData:[],
+    modalWindowStatus: false,
   }
 
 
@@ -28,25 +32,66 @@ export class App extends Component {
   setloaderStatus = (status) => {
     this.setState({loaderStatus: status});
   }
+  setModalStatus = (status) => {
+    this.setState({modalWindowStatus: status});
+  }
+
+
+  setOnMoreBtnData = (name) => {
+    
+    searchMore(name).then(data => {
+      this.setState(prevState => {
+        return {onMoreBtnData: [...prevState.onMoreBtnData,...data]}
+      })
+    }).finally(() => {
+      this.setloaderStatus('off');
+    })
+  }
+
+
+  onMoreBtnClick = (moreRequest) => {
+    this.setloaderStatus('on');
+    this.setOnMoreBtnData(moreRequest)
+  }
+  
+
 
   
 
   render () {
     
-    const {searchRequest, modalUrl, loaderStatus} = this.state
+    const {searchRequest, modalUrl, modalWindowStatus, loaderStatus, onMoreBtnData} = this.state
     
     return (
-      <>
+      
+      
+      <AppStyled>
         {loaderStatus === 'on' && <Loader/>}
+
         <SearchBar bringMeNameToSearch={this.setSearchingImage}/>
 
-        <ImageGallary request={searchRequest} setModalUrl={this.setModalUrl} changeLoaderStatus={this.setloaderStatus}/>
-        
-        <LoadMoreBtn/>
+        <ImageGallary 
+          request={searchRequest} 
+          onMoreBtn={onMoreBtnData} 
+          setModalUrl={this.setModalUrl} 
+          changeLoaderStatus={this.setloaderStatus}
+          setModalStatus={this.setModalStatus} 
+        />
+          
+        <LoadMoreBtn  onMoreBtnClick={() => {
+                        this.onMoreBtnClick(searchRequest)
+                      }}
+        />
 
-        <ModalWindow modalContent={modalUrl}/>
+        {modalWindowStatus && 
+        <ModalWindow>
+          <img src={modalUrl} alt={'dgdvhfgfhg'}></img>
+        </ModalWindow>}
+      </AppStyled>
+      
         
-      </>
+        
+    
     );
   }
 };

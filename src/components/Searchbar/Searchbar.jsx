@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Formik, Form, Field, } from 'formik';
+import { Formik } from 'formik';
+import {SearchBarHead, FormStyled, FieldStyled, SearchBtn, SearchBtnLabel} from 'components/Searchbar/Searchbar.styled';
 
 
 export class SearchBar extends Component {
@@ -17,14 +18,14 @@ export class SearchBar extends Component {
     render () {
         return (
             <>
-            <header className="searchbar">
+            <SearchBarHead className="searchbar">
                 <Formik initialValues={{imageName:''}} onSubmit={this.onFormSubmit}>
-                    <Form className="form">
-                        <button type="submit" className="button">
-                            <span className="button-label">Search</span>
-                        </button>
+                    <FormStyled className="form">
+                        <SearchBtn type="submit" className="button">
+                            <SearchBtnLabel className="button-label">Search</SearchBtnLabel>
+                        </SearchBtn>
 
-                        <Field
+                        <FieldStyled
                         name="imageName"
                         className="input"
                         type="text"
@@ -32,9 +33,9 @@ export class SearchBar extends Component {
                         autoFocus
                         placeholder="Search images and photos"
                         />
-                    </Form>
+                    </FormStyled>
                 </Formik>
-            </header>
+            </SearchBarHead>
             </>
         )
     

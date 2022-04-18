@@ -1,29 +1,23 @@
-import React, { Component }  from "react";
+import React  from "react";
+import {Backdrop, Content} from 'components/Modal/Modal.styled';
 
-export class ModalWindow extends Component  {
-
-state = {
-    modalActive: false,
-}
+export const ModalWindow = (props) =>  {
 
 
 
-    componentDidUpdate (prevProps) {
-        if (prevProps.modalContent !== this.props.modalContent) {
-            this.setState({modalActive: true})
-        }
 
-    }
+    
 
-
-    render () {
+    
 
 
         return (
             <>
-                {this.state.modalActive && <div>Модалка по ссылке {this.props.modalContent}</div>}
+                <Backdrop className="modal-window-back-drop">
+                    <Content className="modal-window-content">{props.children}</Content>
+                </Backdrop>
             </>
             
         )
-    }
+    
 }
