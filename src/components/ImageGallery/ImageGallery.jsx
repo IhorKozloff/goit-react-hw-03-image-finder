@@ -13,8 +13,16 @@ export default class ImageGallery extends Component  {
 
     componentDidUpdate (prevProps, prevState) {
         if (prevProps.request !== this.props.request) {
+
+
+
+            this.props.changeLoaderStatus('on');
+
+            
             searchByName(this.props.request).then(data => {
                 this.setState({dataToRender: data})
+            }).finally(() => {
+                this.props.changeLoaderStatus('off');
             }) 
         }
     }
