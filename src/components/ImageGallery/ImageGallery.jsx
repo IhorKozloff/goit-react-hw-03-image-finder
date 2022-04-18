@@ -1,0 +1,61 @@
+import React, {Component} from "react";
+import {searchByName} from 'components/API';
+import {ImageGalleryItem} from 'components/ImageGalleryItem/ImageGalleryItem';
+import {GallaryList} from 'components/ImageGallery/ImageGallery.styled';
+
+
+
+export default class ImageGallery extends Component  {
+
+    state = {
+        dataToRender:null
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        if (prevProps.request !== this.props.request) {
+            searchByName(this.props.request).then(data => {
+                this.setState({dataToRender: data})
+            }) 
+        }
+    }
+
+    onItemClick = (event) => {
+
+        if (event.target.nodeName !== 'IMG') {
+            return
+        }
+        
+        const currentItem = this.state.dataToRender.filter(item => `${item.id}` === event.target.id) 
+        const currentUrl = currentItem[0].largeImageURL
+        console.log(currentUrl)
+        this.props.setModalUrl(currentUrl)
+        
+    }
+
+    render () {
+        
+
+        return (
+           
+            <GallaryList>
+
+
+               {this.state.dataToRender && this.state.dataToRender.map(item => {
+                   return (
+                       <ImageGalleryItem key={item.id} id={item.id} imageMin={item.webformatURL} onItemClick={this.onItemClick}/>
+                   )
+               })}
+
+            </GallaryList>
+
+            
+        )
+            
+        
+    
+    }
+    
+
+       
+    
+};
