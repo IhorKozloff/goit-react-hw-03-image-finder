@@ -1,20 +1,19 @@
 import React  from "react";
-import {Backdrop, Content} from 'components/Modal/Modal.styled';
+import {Backdrop, Content, ModalCloseBtn} from 'components/Modal/Modal.styled';
 
-export const ModalWindow = (props) =>  {
-
-
-
-
-    
-
-    
-
+export const ModalWindow = ({children, onCloseClick}) =>  {
 
         return (
             <>
                 <Backdrop className="modal-window-back-drop">
-                    <Content className="modal-window-content">{props.children}</Content>
+                <ModalCloseBtn 
+                    type="button" 
+                    className="modal-close-btn" 
+                    onClick={() => {
+                                onCloseClick(false)
+                            }}>X
+                </ModalCloseBtn>
+                    <Content className="modal-window-content">{children}</Content>
                 </Backdrop>
             </>
             

@@ -1,6 +1,6 @@
 import React from "react";
-import {LoaderView} from 'components/Loader/Loader.styled'
+
 
 export const Loader = () => {
-    return (<LoaderView>Loading...</LoaderView>)
+    return (<div className="loader">Loading...</div>)
 }

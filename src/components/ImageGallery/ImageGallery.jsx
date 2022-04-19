@@ -16,14 +16,18 @@ export default class ImageGallery extends Component  {
 
 
 
-            this.props.changeLoaderStatus('on');
+            this.props.changeLoaderStatus(true);
 
             
-            searchByName(this.props.request).then(data => {
-                this.setState({dataToRender: data})
-            }).finally(() => {
-                this.props.changeLoaderStatus('off');
-            }) 
+            setTimeout(() => {
+                searchByName(this.props.request).then(data => {
+                    this.setState({dataToRender: data})
+                    
+                }).finally(() => {
+                    this.props.changeLoaderStatus(false);
+                    this.props.setMoreBtnStatus(true);
+                }) 
+            }, 1000)
         }
 
 

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {SearchBar} from 'components/Searchbar/Searchbar';
 import {ModalWindow} from 'components/Modal/Modal';
+
 import ImageGallary from 'components/ImageGallery/ImageGallery';
 import {LoadMoreBtn} from 'components/Button/Button';
 import {Loader} from 'components/Loader/Loader';
@@ -8,17 +9,18 @@ import {AppStyled} from 'components/App.styled';
 import {searchMore} from 'components/API';
 
 
+
 export class App extends Component {
 
   state = {
     searchRequest: '',
     modalUrl:'',
-    loaderStatus: 'off',
+    loaderStatus: false,
     onMoreBtnData:[],
+    moreBtnStatus: false,
     modalWindowStatus: false,
+
   }
-
-
 
 
 
@@ -35,22 +37,29 @@ export class App extends Component {
   setModalStatus = (status) => {
     this.setState({modalWindowStatus: status});
   }
+  setMoreBtnStatus = (status) => {
+    this.setState({moreBtnStatus: status});
+  }
 
 
   setOnMoreBtnData = (name) => {
-    
-    searchMore(name).then(data => {
-      this.setState(prevState => {
-        return {onMoreBtnData: [...prevState.onMoreBtnData,...data]}
+
+    this.setloaderStatus(true);
+
+    setTimeout(() => {
+      searchMore(name).then(data => {
+        this.setState(prevState => {
+          return {onMoreBtnData: [...prevState.onMoreBtnData,...data]}
+        })
+      }).finally(() => {
+        this.setloaderStatus(false);
       })
-    }).finally(() => {
-      this.setloaderStatus('off');
-    })
+    }, 1000)
   }
 
 
   onMoreBtnClick = (moreRequest) => {
-    this.setloaderStatus('on');
+    this.setloaderStatus(true);
     this.setOnMoreBtnData(moreRequest)
   }
   
@@ -60,13 +69,13 @@ export class App extends Component {
 
   render () {
     
-    const {searchRequest, modalUrl, modalWindowStatus, loaderStatus, onMoreBtnData} = this.state
+    const {searchRequest, modalUrl, modalWindowStatus, loaderStatus, onMoreBtnData, moreBtnStatus} = this.state
     
     return (
       
       
       <AppStyled>
-        {loaderStatus === 'on' && <Loader/>}
+        {loaderStatus === true && <Loader/>}
 
         <SearchBar bringMeNameToSearch={this.setSearchingImage}/>
 
@@ -75,17 +84,18 @@ export class App extends Component {
           onMoreBtn={onMoreBtnData} 
           setModalUrl={this.setModalUrl} 
           changeLoaderStatus={this.setloaderStatus}
-          setModalStatus={this.setModalStatus} 
+          setModalStatus={this.setModalStatus}
+          setMoreBtnStatus={this.setMoreBtnStatus} 
         />
           
-        <LoadMoreBtn  onMoreBtnClick={() => {
+        {moreBtnStatus && <LoadMoreBtn  onMoreBtnClick={() => {
                         this.onMoreBtnClick(searchRequest)
                       }}
-        />
+        />}
 
         {modalWindowStatus && 
-        <ModalWindow>
-          <img src={modalUrl} alt={'dgdvhfgfhg'}></img>
+        <ModalWindow onCloseClick={this.setModalStatus}>
+          <img src={modalUrl} width={900} height={700} alt={'content'}></img>
         </ModalWindow>}
       </AppStyled>
       
